@@ -17,7 +17,7 @@ const app = express();
 
 app.use(cors({
   origin: [
-    "https://your-app.vercel.app", // add after vercel deploy
+    "https://pizza-palace-xcjz.vercel.app",
     "http://localhost:5173"
   ]
 }))
