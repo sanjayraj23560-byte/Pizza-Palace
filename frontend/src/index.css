@@ -1,0 +1,55 @@
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body, #root {
+    background-color: #0e0b08 !important;
+    color: #f5e6d0;
+    min-height: 100%;
+  }
+}
+@import "tailwindcss";
+html, body, #root {
+  background: #27180e !important;
+  color: #fdf0dc !important;
+  min-height: 100dvh;
+}
+*{
+  cursor: none !important;
+}
+
+:root {
+  --bg67:#271812;
+  --bg:    #000000;
+  --bg2:   #0d0c0c;
+  --bg3:   #2a241e;
+  --card:  #252018;
+  --cream: #fdf0dc;
+  --muted: rgba(253,240,220,0.45);
+  --orange: #8f421f;
+  --gold:   #f7d04e;
+}
+
+
+
+
+.cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  width: 30px; height: 30px;
+  border: 2px solid rgba(255, 255, 255, 0.86);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  transition: width 0.18s ease, height 0.18s ease,
+              border-color 0.18s ease, background 0.18s ease,
+              box-shadow 0.18s ease, opacity 0.3s ease;
+}
+
+.cursor-ring.hovering {
+  width: 44px;
+  height: 44px;
+  border-color: oklch(72.258% 0.04181 54.576);
+  background: oklch(49.469% 0.0502 52.688 / 0.3);
+  box-shadow: 0 0 12px rgba(170, 103, 36, 0.4);
+}
