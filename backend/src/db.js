@@ -1,13 +1,19 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
+
 const Pizza_app_DB = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URI)
-        console.log("Conned to DB")
-    } catch (err) {
-        console.log("Failed to connect " + err)
-     }
-}
+  try {
+    if (!process.env.MONGO_URI) {
+      throw new Error("MONGO_URI is missing in Render environment");
+    }
 
-Pizza_app_DB()
+    await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 10000,
+    });
 
-export default Pizza_app_DB
+    console.log("Connected to MongoDB Atlas ✅");
+  } catch (err) {
+    console.log("Failed to connect ❌", err.message);
+  }
+};
+
+export default Pizza_app_DB;
