@@ -14,7 +14,12 @@ import MembershipRouter from './routes/membershipRoutes.js';
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://your-app.vercel.app", // add after vercel deploy
+    "http://localhost:5173"
+  ]
+}))
 app.use(express.json());
 
 Pizza_app_DB();

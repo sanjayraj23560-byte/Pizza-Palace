@@ -24,8 +24,8 @@ const Home = () => {
       try {
         // ✅ Fetch both pizzas and drinks
         const [pizzaRes, drinkRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/pizza"),
-          axios.get("http://localhost:5000/api/drink")
+          axios.get(`${import.meta.env.VITE_API_URL}/api/pizza`),
+          axios.get(`${import.meta.env.VITE_API_URL}/api/drink`)
         ])
 
         const pizzas = pizzaRes.data.slice(0, 3).map(p => ({ ...p, type: "pizza" }))

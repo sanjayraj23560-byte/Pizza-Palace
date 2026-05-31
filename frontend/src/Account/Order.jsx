@@ -16,7 +16,7 @@ const Order = () => {
       setLoading(false)
       return
     }
-    axios.get(`http://localhost:5000/api/order/${userId}`)
+    axios.get(`${import.meta.env.VITE_API_URL}/api/order/${userId}`)
       .then((res) => {
         setOrders(res.data)
         setLoading(false)

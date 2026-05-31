@@ -17,8 +17,7 @@ const Signup = () => {
       return;
     }
 
-    await axios
-      .post("http://localhost:5000/api/users/signup", {
+    axios.post(`${import.meta.env.VITE_API_URL}/api/users/signup`, {
         username: username,
         password: password,
       })

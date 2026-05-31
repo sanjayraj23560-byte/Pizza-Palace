@@ -13,7 +13,7 @@ export const CartProvider = ({ children }) => {
       const userId = getUserId()
       if (!userId) return 
       try {
-        const res = await axios.get(`http://localhost:5000/api/cart/${userId}`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/cart/${userId}`)
         if (res.data && res.data.items) {
           setCart(res.data.items);
         }
@@ -28,7 +28,7 @@ export const CartProvider = ({ children }) => {
     const userId = getUserId()
     if (!userId) return
     try {
-      const response = await axios.post("http://localhost:5000/api/cart/add", {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/cart/add`, {
         userId: userId,
         product: product
       });
@@ -42,7 +42,7 @@ export const CartProvider = ({ children }) => {
     const userId = getUserId()
     if (!userId) return
     try {
-      const response = await axios.post("http://localhost:5000/api/cart/remove", {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/cart/remove`, {
         userId: userId,
         productId: productId
       });

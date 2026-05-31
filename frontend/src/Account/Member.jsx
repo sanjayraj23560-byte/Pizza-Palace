@@ -86,7 +86,7 @@ const Member = () => {
     setPaying(true)
 
     try {
-      const { data: order } = await axios.post("http://localhost:5000/api/membership/create-order", {
+      const { data: order } = axios.post(`${import.meta.env.VITE_API_URL}/api/membership/create-order`, {
         amount: selectedTier.amount,
         membership: selectedTier.name
       })
@@ -100,7 +100,7 @@ const Member = () => {
         order_id: order.id,
         handler: async (response) => {
           try {
-            await axios.post("http://localhost:5000/api/membership/verify", {
+            axios.post(`${import.meta.env.VITE_API_URL}/api/membership/verify`, {
               ...response,
               userId: user._id,
               membership: selectedTier.name

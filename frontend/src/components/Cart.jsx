@@ -47,7 +47,7 @@ const Cart = () => {
 
     try {
       // 1. Create Razorpay order
-      const { data: order } = await axios.post("http://localhost:5000/api/membership/create-order", {
+      const { data: order } =  await axios.post(`${import.meta.env.VITE_API_URL}/api/membership/create-order`, {
         amount: getCartTotal(),
         membership: "order"
       })
@@ -63,7 +63,7 @@ const Cart = () => {
         handler: async (response) => {
           // 3. Payment success — now place the order
           try {
-            await axios.post("http://localhost:5000/api/order", {
+            axios.post(`${import.meta.env.VITE_API_URL}/api/order`, {
               cart: cart,
               total: getCartTotal(),
               userId: userId,

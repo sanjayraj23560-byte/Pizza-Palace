@@ -19,7 +19,7 @@ const PizzaSection = () => {
   const [toast, setToast] = useState(false)
   useEffect(() => {
     const Fetch_pizza = async () => {
-      await axios.get("http://localhost:5000/api/pizza")
+      axios.get(`${import.meta.env.VITE_API_URL}/api/pizza`)
         .then((res) => { setPizzas(res.data) })
         .catch((err) => { console.log("Error fetching the menu:", err) })
     };

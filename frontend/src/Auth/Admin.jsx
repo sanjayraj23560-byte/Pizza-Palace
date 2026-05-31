@@ -32,7 +32,7 @@ const Admin = () => {
 
     const fetchOrders = () => {
         setLoading(true)
-        axios.get("http://localhost:5000/api/order/all")
+        axios.get(`${import.meta.env.VITE_API_URL}/api/order/all`)
             .then(res => {
                 setOrders(res.data)
                 setLoading(false)
@@ -46,7 +46,7 @@ const Admin = () => {
     const handleAdminLogin = async () => {
         if (!username || !password) { setError("Fill all fields"); return }
         try {
-            const res = await axios.post("http://localhost:5000/api/users/admin-login", {
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/users/admin-login`, {
                 username, password
             })
             localStorage.setItem("admin", JSON.stringify(res.data))
@@ -60,7 +60,7 @@ const Admin = () => {
     const handleStatusChange = async (orderId, newStatus) => {
         try {
             const res = await axios.patch(
-                `http://localhost:5000/api/order/${orderId}/status`,
+                `${import.meta.env.VITE_API_URL}/api/order/${orderId}/status`,
                 { status: newStatus }
             )
             // Update locally without refetching

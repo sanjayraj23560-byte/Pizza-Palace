@@ -38,8 +38,7 @@ const Login = () => {
       alert("Please fill all fields");
       return;
     }
-    await axios
-      .post("http://localhost:5000/api/users/login", {
+    axios.post(`${import.meta.env.VITE_API_URL}/api/users/login`, {
         username: username,
         password: password,
       })
