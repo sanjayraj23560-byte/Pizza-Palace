@@ -15,7 +15,7 @@ const Drinksection = () => {
 
     useEffect(() => {
         const FetchDrinks = async () => {
-            axios.get(`${import.meta.env.VITE_API_URL}/api/drink`)
+            axios.get("http://localhost:5000/api/drink")
                 .then((res) => { SetDrink(res.data) })
                 .catch((err) => { console.log(err) })
         }

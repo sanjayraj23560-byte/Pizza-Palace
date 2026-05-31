@@ -1,3 +1,6 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 import mongoose from "mongoose";
 
 import Pizza_app_DB from "./db.js";
