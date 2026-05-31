@@ -34,74 +34,78 @@ const Cart = () => {
   }
 
   // ✅ Step 2 — open Razorpay, then place order on success
-  const handlePayment = async () => {
-    const user = JSON.parse(localStorage.getItem("user"))
-    const userId = user?._id
+ const handlePayment = async () => {
+  const user = JSON.parse(localStorage.getItem("user"))
+  const userId = user?._id
 
-    if (!userId) {
-      alert("Please login first!")
+  if (!userId) {
+    alert("Please login first!")
+    return
+  }
+
+  setPlacing(true)
+
+  try {
+    // 1. Create Razorpay order
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/membership/create-order`, {
+      amount: getCartTotal(),
+      membership: "order"
+    })
+
+    // ✅ Check if order was created successfully
+    const order = res.data
+    if (!order || !order.amount) {
+      alert("Payment initialization failed! Please try again.")
+      setPlacing(false)
       return
     }
 
-    setPlacing(true)
-
-    try {
-      // 1. Create Razorpay order
-      const { data: order } =  await axios.post(`${import.meta.env.VITE_API_URL}/api/membership/create-order`, {
-        amount: getCartTotal(),
-        membership: "order"
-      })
-
-      // 2. Open Razorpay
-      const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-        amount: order.amount,
-        currency: "INR",
-        name: "PizzaPalace",
-        description: "Order Payment",
-        order_id: order.id,
-        handler: async (response) => {
-          // 3. Payment success — now place the order
-          try {
-            axios.post(`${import.meta.env.VITE_API_URL}/api/order`, {
-              cart: cart,
-              total: getCartTotal(),
-              userId: userId,
-              address: address,
-              paymentId: response.razorpay_payment_id // ✅ save payment ID
-            })
-            clearCart()
-            setShowAddressModal(false)
-            setStep("address")
-            navi('/order')
-          } catch (err) {
-            console.error("Order Error:", err.message)
-            alert("Payment done but order failed! Contact support.")
-            setPlacing(false)
-          }
-        },
-        prefill: {
-          name: address.name,
-          contact: address.phone,
-        },
-        theme: { color: "#8f421f" },
-        modal: {
-          ondismiss: () => {
-            setPlacing(false)
-          }
+    // 2. Open Razorpay
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: order.amount,
+      currency: "INR",
+      name: "PizzaPalace",
+      description: "Order Payment",
+      order_id: order.id,
+      handler: async (response) => {
+        try {
+          await axios.post(`${import.meta.env.VITE_API_URL}/api/order`, {
+            cart: cart,
+            total: getCartTotal(),
+            userId: userId,
+            address: address,
+            paymentId: response.razorpay_payment_id
+          })
+          clearCart()
+          setShowAddressModal(false)
+          setStep("address")
+          navi('/order')
+        } catch (err) {
+          console.error("Order Error:", err.message)
+          alert("Payment done but order failed! Contact support.")
+          setPlacing(false)
         }
+      },
+      prefill: {
+        name: address.name,
+        contact: address.phone,
+      },
+      theme: { color: "#8f421f" },
+      modal: {
+        ondismiss: () => setPlacing(false)
       }
-
-      const razorpay = new window.Razorpay(options)
-      razorpay.open()
-
-    } catch (err) {
-      console.error("Payment init error:", err)
-      alert("Payment failed to initialize!")
-      setPlacing(false)
     }
-  }
 
+    const razorpay = new window.Razorpay(options)
+    razorpay.open()
+
+  } catch (err) {
+    console.error("Payment init error:", err)
+    alert(`Payment failed: ${err.response?.data?.message || err.message}`)
+    setPlacing(false)
+  }
+}
   const inputStyle = {
     width: "100%",
     padding: "10px 14px",
