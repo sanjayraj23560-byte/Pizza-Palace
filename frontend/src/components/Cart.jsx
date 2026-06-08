@@ -44,6 +44,7 @@ const Cart = () => {
     setPlacing(true)
 
     try {
+      // ✅ FIXED: was /api/orders/create-order (404), now uses correct endpoint
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/membership/create-order`, {
         amount: getCartTotal(),
         membership: "order"
@@ -101,6 +102,7 @@ const Cart = () => {
       setPlacing(false)
     }
   }
+
   const inputStyle = {
     width: "100%",
     padding: "10px 14px",
@@ -114,7 +116,6 @@ const Cart = () => {
   }
 
   return (
-
     <div className="page grain" style={{ padding: "24px 20px 130px" }}>
       <motion.span
         initial={{ opacity: 0, y: 15 }}
@@ -193,7 +194,6 @@ const Cart = () => {
       <AnimatePresence>
         {showAddressModal && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => { setShowAddressModal(false); setStep("address"); setPlacing(false) }}
@@ -217,7 +217,6 @@ const Cart = () => {
                 display: "flex", flexDirection: "column",
               }}
             >
-              {/* Drag handle */}
               <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}>
                 <div style={{ width: 40, height: 4, borderRadius: 2, background: "var(--border)" }} />
               </div>
@@ -246,7 +245,6 @@ const Cart = () => {
 
               {step === "address" && (
                 <>
-
                   <div style={{ flex: 1, overflowY: "auto", padding: "8px 20px 8px" }}>
                     <motion.span
                       initial={{ opacity: 0, y: 15 }}
@@ -314,7 +312,6 @@ const Cart = () => {
                       Order <span style={{ color: "var(--orange)" }}>Summary</span>
                     </h2>
 
-                    {/* Address summary */}
                     <div style={{ background: "var(--bg3)", borderRadius: 12, padding: "12px 14px", marginBottom: 16 }}>
                       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
                         <span style={{ color: "var(--muted)", fontSize: "0.8rem" }}>Delivering to</span>
@@ -329,7 +326,6 @@ const Cart = () => {
                       </p>
                     </div>
 
-                    {/* Items summary */}
                     <div style={{ background: "var(--bg3)", borderRadius: 12, padding: "12px 14px", marginBottom: 16 }}>
                       {cart.map((item, i) => (
                         <div key={i} style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
@@ -343,7 +339,6 @@ const Cart = () => {
                       </div>
                     </div>
 
-                    {/* Payment methods info */}
                     <div style={{ background: "var(--bg3)", borderRadius: 12, padding: "12px 14px" }}>
                       <p style={{ fontSize: "0.8rem", color: "var(--muted)", marginBottom: 8 }}>Accepted payments</p>
                       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>

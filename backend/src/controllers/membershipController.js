@@ -38,7 +38,7 @@ export const verifyPayment = async (req, res) => {
     if (expectedSignature !== razorpay_signature) {
       return res.status(400).json({ message: "Payment verification failed" });
     }
-await UserModel.findOneAndUpdate({ uid: userId }, { membership });
+    await UserModel.findByIdAndUpdate(userId, { membership });
     res.status(200).json({ message: "Payment verified!", membership });
   } catch (error) {
     console.error("Verify error:", error);
