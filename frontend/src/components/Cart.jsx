@@ -17,7 +17,7 @@ const Cart = () => {
     pincode: ""
   })
   const [placing, setPlacing] = useState(false)
-  const [step, setStep] = useState("address") // ✅ "address" | "payment"
+  const [step, setStep] = useState("address")
 
   const handleAddressChange = (e) => {
     setAddress({ ...address, [e.target.name]: e.target.value })
@@ -27,85 +27,80 @@ const Cart = () => {
     return address.name && address.phone && address.street && address.city && address.pincode
   }
 
-  // ✅ Step 1 — confirm address, move to payment step
   const handleAddressConfirm = () => {
     if (!isAddressValid()) return
     setStep("payment")
   }
 
-  // ✅ Step 2 — open Razorpay, then place order on success
- const handlePayment = async () => {
-  const user = JSON.parse(localStorage.getItem("user"))
-  const userId = user?._id
+  const handlePayment = async () => {
+    const user = JSON.parse(localStorage.getItem("user"))
+    const userId = user?._id
 
-  if (!userId) {
-    alert("Please login first!")
-    return
-  }
-
-  setPlacing(true)
-
-  try {
-    // 1. Create Razorpay order
-    const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/membership/create-order`, {
-      amount: getCartTotal(),
-      membership: "order"
-    })
-
-    // ✅ Check if order was created successfully
-    const order = res.data
-    if (!order || !order.amount) {
-      alert("Payment initialization failed! Please try again.")
-      setPlacing(false)
+    if (!userId) {
+      alert("Please login first!")
       return
     }
 
-    // 2. Open Razorpay
-    const options = {
-      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      amount: order.amount,
-      currency: "INR",
-      name: "PizzaPalace",
-      description: "Order Payment",
-      order_id: order.id,
-      handler: async (response) => {
-        try {
-          await axios.post(`${import.meta.env.VITE_API_URL}/api/order`, {
-            cart: cart,
-            total: getCartTotal(),
-            userId: userId,
-            address: address,
-            paymentId: response.razorpay_payment_id
-          })
-          clearCart()
-          setShowAddressModal(false)
-          setStep("address")
-          navi('/order')
-        } catch (err) {
-          console.error("Order Error:", err.message)
-          alert("Payment done but order failed! Contact support.")
-          setPlacing(false)
-        }
-      },
-      prefill: {
-        name: address.name,
-        contact: address.phone,
-      },
-      theme: { color: "#8f421f" },
-      modal: {
-        ondismiss: () => setPlacing(false)
+    setPlacing(true)
+
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/membership/create-order`, {
+        amount: getCartTotal(),
+        membership: "order"
+      })
+
+      const order = res.data
+      if (!order || !order.amount) {
+        alert("Payment initialization failed! Please try again.")
+        setPlacing(false)
+        return
       }
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: "INR",
+        name: "PizzaPalace",
+        description: "Order Payment",
+        order_id: order.id,
+        handler: async (response) => {
+          try {
+            await axios.post(`${import.meta.env.VITE_API_URL}/api/order`, {
+              cart: cart,
+              total: getCartTotal(),
+              userId: userId,
+              address: address,
+              paymentId: response.razorpay_payment_id
+            })
+            clearCart()
+            setShowAddressModal(false)
+            setStep("address")
+            navi('/order')
+          } catch (err) {
+            console.error("Order Error:", err.message)
+            alert("Payment done but order failed! Contact support.")
+            setPlacing(false)
+          }
+        },
+        prefill: {
+          name: address.name,
+          contact: address.phone,
+        },
+        theme: { color: "#8f421f" },
+        modal: {
+          ondismiss: () => setPlacing(false)
+        }
+      }
+
+      const razorpay = new window.Razorpay(options)
+      razorpay.open()
+
+    } catch (err) {
+      console.error("Payment init error:", err)
+      alert(`Payment failed: ${err.response?.data?.message || err.message}`)
+      setPlacing(false)
     }
-
-    const razorpay = new window.Razorpay(options)
-    razorpay.open()
-
-  } catch (err) {
-    console.error("Payment init error:", err)
-    alert(`Payment failed: ${err.response?.data?.message || err.message}`)
-    setPlacing(false)
   }
-}
   const inputStyle = {
     width: "100%",
     padding: "10px 14px",
@@ -139,6 +134,9 @@ const Cart = () => {
       {cart.length === 0 ? (
         <div style={{ textAlign: "center", marginTop: 60, color: "var(--muted)" }}>
           <i className="ti ti-shopping-cart" style={{ fontSize: 48, display: "block", marginBottom: 12 }} />
+          <br />
+          <h1><span className="text-amber-600">Login before adding to cart</span></h1>
+          <br />
           <p>Your cart is empty</p>
         </div>
       ) : (
@@ -224,8 +222,6 @@ const Cart = () => {
                 <div style={{ width: 40, height: 4, borderRadius: 2, background: "var(--border)" }} />
               </div>
 
-              {/* ✅ Step indicator */}
-
               <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "0 20px 12px" }}>
                 <div style={{
                   display: "flex", alignItems: "center", gap: 6,
@@ -247,8 +243,6 @@ const Cart = () => {
                   <span style={{ fontSize: "0.78rem", color: step === "payment" ? "#fff" : "var(--muted)", fontWeight: 600 }}>Payment</span>
                 </div>
               </div>
-
-              {/* ✅ ADDRESS STEP */}
 
               {step === "address" && (
                 <>
@@ -303,7 +297,6 @@ const Cart = () => {
                 </>
               )}
 
-              {/* ✅ PAYMENT STEP */}
               {step === "payment" && (
                 <>
                   <div style={{ flex: 1, overflowY: "auto", padding: "8px 20px" }}>

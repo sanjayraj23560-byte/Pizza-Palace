@@ -6,13 +6,13 @@ const orderSchema = mongoose.Schema({
   price: Number,
   status: { type: String, default: "Pending" },
   picture: String,
-  address: {           // ✅ NEW
+  address: {           
     name: String,
     phone: String,
     street: String,
     city: String,
     pincode: String
   }
-}, { timestamps: true }); // ✅ needed for createdAt
+}, { timestamps: true }); 
 
 export const orderModel = mongoose.model("orders", orderSchema);

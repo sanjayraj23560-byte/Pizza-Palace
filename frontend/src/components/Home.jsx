@@ -22,7 +22,6 @@ const Home = () => {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        // ✅ Fetch both pizzas and drinks
         const [pizzaRes, drinkRes] = await Promise.all([
           axios.get(`${import.meta.env.VITE_API_URL}/api/pizza`),
           axios.get(`${import.meta.env.VITE_API_URL}/api/drink`)
@@ -30,8 +29,6 @@ const Home = () => {
 
         const pizzas = pizzaRes.data.slice(0, 3).map(p => ({ ...p, type: "pizza" }))
         const drinks = drinkRes.data.slice(0, 2).map(d => ({ ...d, type: "drink" }))
-
-        // ✅ Mix pizzas and drinks, take first 5
         setFeatured([...pizzas, ...drinks])
         setLoading(false)
       } catch (err) {
@@ -48,7 +45,6 @@ const Home = () => {
     setTimeout(() => setToast(false), 2000)
   }
 
-  // ✅ Filter by search
   const filtered = featured.filter(f =>
     f.name.toLowerCase().includes(search.toLowerCase())
   )

@@ -24,11 +24,9 @@ const CartSchema = new mongoose.Schema({
     }
 });
 
-// This is the blueprint for the entire Cart belonging to a specific User
 const UserCartSchema = new mongoose.Schema({
-    // We strictly tie the cart to the user who is logged in!
     userId: { type: String, required: true },
-    items: [CartSchema], // An array of the items above
+    items: [CartSchema],
 }, { timestamps: true });
 
 const Cart = mongoose.model("Cart", UserCartSchema);

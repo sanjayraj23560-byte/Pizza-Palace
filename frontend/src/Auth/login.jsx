@@ -6,13 +6,12 @@ import { auth, googleProvider } from "../config";
 import axios from "axios";
 import pizzaLogo from "../Assets/effect_logo.png";
 
-// --- Animation Variants ---
 const formContainerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1, // Delays each child animation by 0.1s
+      staggerChildren: 0.1,
       delayChildren: 0.1,
     },
   },
@@ -83,14 +82,13 @@ const Login = () => {
 
   return (
     <div style={{ overflow: "hidden", position: "relative", width: "100vw", minHeight: "100dvh" }}>
-      {/* AnimatePresence handles smooth mounting/unmounting of components */}
       <AnimatePresence mode="wait">
         {effect ? (
           <motion.div
-            key="splash" // Key is required for AnimatePresence to track the component
+            key="splash"
             initial={{ opacity: 0, scale: 0.96, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 1.05, filter: "blur(4px)" }} // Smoother exit
+            exit={{ opacity: 0, scale: 1.05, filter: "blur(4px)" }}
             transition={{
               duration: 0.8,
               ease: [0.22, 1, 0.36, 1],
@@ -156,7 +154,6 @@ const Login = () => {
               background: "var(--bg)",
             }}
           >
-            {/* Using variants here to stagger the children */}
             <motion.div
               variants={formContainerVariants}
               initial="hidden"
@@ -174,7 +171,7 @@ const Login = () => {
               <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                 <motion.input
                   variants={itemVariants}
-                  whileFocus={{ scale: 1.02 }} // Pop effect on focus
+                  whileFocus={{ scale: 1.02 }}
                   className="input-field border-2 rounded-2xl p-5"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -185,7 +182,7 @@ const Login = () => {
                 
                 <motion.input
                   variants={itemVariants}
-                  whileFocus={{ scale: 1.02 }} // Pop effect on focus
+                  whileFocus={{ scale: 1.02 }}
                   className="input-field border-2 rounded-2xl p-5"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

@@ -13,7 +13,6 @@ const menuItems = [
 const stagger = { animate: { transition: { staggerChildren: 0.08 } } }
 const fadeUp = { initial: { opacity: 0, y: 18 }, animate: { opacity: 1, y: 0, transition: { duration: 0.35 } } }
 
-// ✅ membership badge config
 const membershipConfig = {
   Diamond: { icon: "💎", color: "#4fc3f7", bg: "rgba(79,195,247,0.15)" },
   Gold: { icon: "🏆", color: "#f5c842", bg: "rgba(245,200,66,0.15)" },
@@ -62,7 +61,6 @@ const Account = () => {
           <p style={{ color: "var(--muted)", fontSize: "0.82rem" }}>
             {user?.email || "No email"}
           </p>
-          {/* ✅ Dynamic membership badge */}
           {membership === "none" ? (
             <span
               onClick={() => navi('/member')}

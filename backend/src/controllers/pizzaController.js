@@ -1,4 +1,4 @@
-import Pizza from "../models/Pizza.js"; // Import the blueprint!
+import Pizza from "../models/Pizza.js";
 
 export const getAllPizzas = async (req, res) => {
     try {

@@ -63,7 +63,6 @@ const Admin = () => {
                 `${import.meta.env.VITE_API_URL}/api/order/${orderId}/status`,
                 { status: newStatus }
             )
-            // Update locally without refetching
             setOrders(prev => prev.map(o => o._id === orderId ? { ...o, status: newStatus } : o))
         } catch (err) {
             alert("Failed to update status")
